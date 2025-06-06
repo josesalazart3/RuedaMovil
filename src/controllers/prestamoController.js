@@ -3,7 +3,8 @@ const Prestamo = require('../models/prestamo');
 const crypto = require('crypto');
 
 exports.reservar = async (req, res) => {
-  const { id_usuario, id_terminal_origen, id_terminal_destino } = req.body;
+  const { id_terminal_origen, id_terminal_destino } = req.body;
+  const id_usuario = req.usuario.id; // ✅ obtenido del token JWT
 
   try {
     const bicicleta = await Bicicleta.obtenerDisponibleEnTerminal(id_terminal_origen);
