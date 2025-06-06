@@ -14,7 +14,18 @@ const Bicicleta = {
       'UPDATE bicicleta SET estado = ? WHERE id_bicicleta = ?',
       [estado, id_bicicleta]
     );
-  }
+  },
+  async actualizarEstado(id_bicicleta, estado, ubicacion_actual) {
+  await db.query(
+    `UPDATE bicicleta 
+     SET estado = ?, ubicacion_actual = ?, fecha_ultimo_mantenimiento = NOW()
+     WHERE id_bicicleta = ?`,
+    [estado, ubicacion_actual, id_bicicleta]
+  );
+}
+
+  
 };
+
 
 module.exports = Bicicleta;

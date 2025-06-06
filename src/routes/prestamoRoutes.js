@@ -5,5 +5,7 @@ const verifyToken = require('../middleware/verifyToken'); // ✅
 
 router.post('/reservar', verifyToken, prestamoController.reservar); // ✅ protegida
 router.post('/modificar-destino', verifyToken, prestamoController.modificarDestino); // ✅
+router.post('/devolver', verifyToken, prestamoController.devolver);
+
 
 module.exports = router;

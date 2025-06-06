@@ -7,7 +7,24 @@ const Terminal = {
       [id_terminal]
     );
     return rows.length > 0;
-  }
+  },
+  async obtener(id_terminal) {
+  const [rows] = await db.query(
+    'SELECT * FROM terminal WHERE id_terminal = ?',
+    [id_terminal]
+  );
+  return rows[0];
+},
+
+async actualizarEspacios(id_terminal, cantidad) {
+  await db.query(
+    `UPDATE terminal 
+     SET espacios_disponibles = espacios_disponibles + ?
+     WHERE id_terminal = ?`,
+    [cantidad, id_terminal]
+  );
+}
+
 };
 
 module.exports = Terminal;
