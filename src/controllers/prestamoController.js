@@ -1,0 +1,36 @@
+const Bicicleta = require('../models/bicicleta');
+const Prestamo = require('../models/prestamo');
+const crypto = require('crypto');
+
+exports.reservar = async (req, res) => {
+  const { id_usuario, id_terminal_origen, id_terminal_destino } = req.body;
+
+  try {
+    const bicicleta = await Bicicleta.obtenerDisponibleEnTerminal(id_terminal_origen);
+
+    if (!bicicleta) {
+      return res.status(404).json({ mensaje: 'No hay bicicletas disponibles en esta terminal' });
+    }
+
+    const codigo = crypto.randomBytes(4).toString('hex');
+
+    const id_prestamo = await Prestamo.crear({
+      id_usuario,
+      id_bicicleta: bicicleta.id_bicicleta,
+      id_terminal_origen,
+      id_terminal_destino,
+      codigo
+    });
+
+    await Bicicleta.actualizarEstado(bicicleta.id_bicicleta, 'en uso');
+
+    res.status(201).json({
+      mensaje: 'Reserva confirmada',
+      id_prestamo,
+      codigo_desbloqueo: codigo
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al reservar bicicleta', error });
+  }
+};

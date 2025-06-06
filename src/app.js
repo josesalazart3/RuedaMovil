@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const prestamoRoutes = require('./routes/prestamoRoutes'); // ✅ NUEVO
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/prestamos', prestamoRoutes); // ✅ NUEVO
 
 app.get('/', (req, res) => {
     res.send('RuedaMovil API activa 🚴‍♂️');
