@@ -104,4 +104,15 @@ exports.devolver = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al devolver bicicleta', error });
   }
 };
+exports.verHistorial = async (req, res) => {
+  const id_usuario = req.usuario.id;
+
+  try {
+    const historial = await Prestamo.obtenerHistorialPorUsuario(id_usuario);
+    res.status(200).json({ historial });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al obtener historial', error });
+  }
+};
 

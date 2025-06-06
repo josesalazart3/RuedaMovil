@@ -53,7 +53,24 @@ const Prestamo = {
          fecha_ultima_falta = NOW();`,
       [id_usuario]
     );
-  }
+  },
+  async obtenerHistorialPorUsuario(id_usuario) {
+  const [rows] = await db.query(
+    `SELECT p.*, b.modelo, t1.nombre AS terminal_origen, t2.nombre AS terminal_destino
+     FROM prestamo p
+     JOIN bicicleta b ON p.id_bicicleta = b.id_bicicleta
+     JOIN terminal t1 ON p.id_terminal_origen = t1.id_terminal
+     JOIN terminal t2 ON p.id_terminal_destino = t2.id_terminal
+     WHERE p.id_usuario = ?
+     ORDER BY p.fecha_inicio DESC`,
+    [id_usuario]
+  );
+  return rows;
+}
+
+  
+  
 };
+
 
 module.exports = Prestamo;
