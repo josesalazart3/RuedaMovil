@@ -58,6 +58,7 @@ const Terminal = {
     `);
     return rows;
   },
+  //se reutiliza para activar termina UC-14
   async marcarEnMantenimiento(id_terminal) {
   await db.query(
     `UPDATE terminal 

@@ -36,7 +36,7 @@ exports.estadoTerminales = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener estado de terminales', error });
   }
 };
-
+//se reutiliza para activar termina UC-14
 exports.asignarMantenimiento = async (req, res) => {
   const id_terminal = req.params.id;
 
