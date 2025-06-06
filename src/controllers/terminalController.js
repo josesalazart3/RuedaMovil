@@ -36,3 +36,16 @@ exports.estadoTerminales = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al obtener estado de terminales', error });
   }
 };
+
+exports.asignarMantenimiento = async (req, res) => {
+  const id_terminal = req.params.id;
+
+  try {
+    await Terminal.marcarEnMantenimiento(id_terminal);
+    res.status(200).json({ mensaje: 'Terminal marcada como en mantenimiento' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al asignar mantenimiento', error });
+  }
+};
+

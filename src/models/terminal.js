@@ -57,7 +57,16 @@ const Terminal = {
       FROM terminal t
     `);
     return rows;
-  }
+  },
+  async marcarEnMantenimiento(id_terminal) {
+  await db.query(
+    `UPDATE terminal 
+     SET estado = 'mantenimiento'
+     WHERE id_terminal = ?`,
+    [id_terminal]
+  );
+}
+
 
 
 };
