@@ -6,5 +6,6 @@ const verifyAdmin = require('../middleware/verifyAdmin');
 
 router.post('/', verifyToken, verifyAdmin, terminalController.agregar);
 router.put('/:id/estado', verifyToken, verifyAdmin, terminalController.cambiarEstado);
+router.get('/estado', verifyToken, terminalController.estadoTerminales)
 
 module.exports = router;

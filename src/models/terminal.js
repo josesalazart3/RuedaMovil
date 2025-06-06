@@ -35,6 +35,7 @@ const Terminal = {
     );
     return res.insertId;
   },
+  
 
   // ✅ NUEVO: cambiar estado (activa/inactiva)
   async actualizarEstado(id_terminal, nuevo_estado) {
@@ -42,7 +43,24 @@ const Terminal = {
       `UPDATE terminal SET estado = ? WHERE id_terminal = ?`,
       [nuevo_estado, id_terminal]
     );
+  },
+  async obtenerEstadoTerminales() {
+    const [rows] = await db.query(`
+      SELECT 
+        t.id_terminal,
+        t.nombre,
+        t.ubicacion,
+        t.capacidad_maxima,
+        t.espacios_disponibles,
+        (t.capacidad_maxima - t.espacios_disponibles) AS bicicletas_ocupando,
+        t.estado
+      FROM terminal t
+    `);
+    return rows;
   }
+
+
 };
+
 
 module.exports = Terminal;
