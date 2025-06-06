@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bicicletaRoutes = require('./routes/bicicletaRoutes');
+const terminalRoutes = require('./routes/terminalRoutes'); // ✅
+
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
@@ -16,6 +18,7 @@ app.use('/api/bicicletas', bicicletaRoutes); // ✅ nueva ruta
 
 app.use('/api/auth', authRoutes);
 app.use('/api/prestamos', prestamoRoutes); // ✅ NUEVO
+app.use('/api/terminales', terminalRoutes); // ✅
 
 app.get('/', (req, res) => {
     res.send('RuedaMovil API activa 🚴‍♂️');
