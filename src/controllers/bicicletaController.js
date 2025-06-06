@@ -35,3 +35,19 @@ exports.mandarAMantenimiento = async (req, res) => {
     res.status(500).json({ mensaje: 'Error al mandar bicicleta a mantenimiento', error });
   }
 };
+exports.verDisponibilidad = async (req, res) => {
+  const { id_terminal } = req.params;
+
+  try {
+    const detalle = await Bicicleta.disponibilidadDetallada(id_terminal);
+    res.status(200).json({
+      mensaje: 'Disponibilidad consultada correctamente',
+      ...detalle
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al consultar disponibilidad', error });
+  }
+};
+
+

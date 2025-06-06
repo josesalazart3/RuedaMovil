@@ -8,5 +8,7 @@ const verifyAdmin = require('../middleware/verifyAdmin'); // ✅ nuevo middlewar
 router.post('/', verifyToken, verifyAdmin, bicicletaController.agregar);
 router.put('/:id/retirar', verifyToken, verifyAdmin, bicicletaController.retirar);
 router.put('/:id/mantenimiento', verifyToken, verifyAdmin, bicicletaController.mandarAMantenimiento);
+router.get('/disponibles/:id_terminal', bicicletaController.verDisponibilidad);
+
 
 module.exports = router;

@@ -37,6 +37,37 @@ const Bicicleta = {
       [modelo, ubicacion_actual]
     );
     return res.insertId;
+  },
+
+  // Contador simple de disponibles
+  async disponiblesEnTerminal(id_terminal) {
+    const [rows] = await db.query(
+      `SELECT COUNT(*) AS disponibles 
+       FROM bicicleta 
+       WHERE estado = 'disponible' AND ubicacion_actual = ?`,
+      [id_terminal]
+    );
+    return rows[0].disponibles;
+  },
+
+  // ✅ Disponibilidad detallada para el UC-10
+  async disponibilidadDetallada(id_terminal) {
+    const [terminalInfo] = await db.query(
+      `SELECT nombre FROM terminal WHERE id_terminal = ?`,
+      [id_terminal]
+    );
+
+    const [bicis] = await db.query(
+      `SELECT modelo FROM bicicleta 
+       WHERE estado = 'disponible' AND ubicacion_actual = ?`,
+      [id_terminal]
+    );
+
+    return {
+      terminal: terminalInfo[0]?.nombre || 'Terminal desconocida',
+      total: bicis.length,
+      modelos: bicis.map(b => b.modelo)
+    };
   }
 };
 
