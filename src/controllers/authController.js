@@ -4,7 +4,8 @@ const Usuario = require('../models/usuario');
 
 // Registro de usuario
 exports.registrar = async (req, res) => {
-  const { nombre, correo, password } = req.body;
+  const { nombre, correo, password, rol } = req.body; // incluir rol opcional
+
   try {
     const usuarioExistente = await Usuario.buscarPorCorreo(correo);
     if (usuarioExistente) {
@@ -12,9 +13,9 @@ exports.registrar = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    const nuevoId = await Usuario.crear(nombre, correo, hash);
+    const nuevoId = await Usuario.crear(nombre, correo, hash, rol); // pasar rol al modelo
 
-    // Simular verificación automática (estado = 'verificado')
+    // Simular verificación automática
     await Usuario.verificar(correo);
 
     return res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
@@ -27,26 +28,29 @@ exports.registrar = async (req, res) => {
 // Inicio de sesión
 exports.login = async (req, res) => {
   const { correo, password } = req.body;
+
   try {
     const usuario = await Usuario.buscarPorCorreo(correo);
     if (!usuario) {
       return res.status(400).json({ mensaje: 'Correo no encontrado' });
     }
 
-    // Verificar si estado es "verificado"
     if (usuario.estado !== 'verificado') {
       return res.status(403).json({ mensaje: 'Cuenta no verificada' });
     }
 
-    // Verificar contraseña
     const coincide = await bcrypt.compare(password, usuario.contraseña);
     if (!coincide) {
       return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
     }
 
-    // Generar token
+    // Incluir el rol en el token
     const token = jwt.sign(
-      { id: usuario.id_usuario, correo: usuario.correo },
+      {
+        id: usuario.id_usuario,
+        correo: usuario.correo,
+        rol: usuario.rol
+      },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
@@ -58,6 +62,7 @@ exports.login = async (req, res) => {
         id: usuario.id_usuario,
         nombre: usuario.nombre,
         correo: usuario.correo,
+        rol: usuario.rol,
         estado: usuario.estado
       }
     });
